@@ -139,14 +139,19 @@ function App() {
   if (!gameStarted) {
     return (
       <div style={{
-        height: '100vh',
-        background: 'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%)', // Birthday Gradient
+        height: '100dvh',       // <--- CHANGED: "dvh" adapts to mobile address bars
+        width: '100vw',         // <--- ADDED: Forces full width
+        position: 'fixed',      // <--- ADDED: Pins it to the screen
+        top: 0,
+        left: 0,
+        background: 'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        fontFamily: 'Arial, sans-serif'
+        fontFamily: 'Arial, sans-serif',
+        zIndex: 9999            // <--- ADDED: Ensures it sits on top of everything
       }}>
         <h1 style={{
           fontSize: '3.5rem',
