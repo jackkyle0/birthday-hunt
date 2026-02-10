@@ -168,7 +168,7 @@ function App() {
         background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', 
         display: 'flex', 
         flexDirection: 'column', 
-        justifyContent: 'center', 
+        justifyContent: 'space-evenly', 
         alignItems: 'center',
         textAlign: 'center', 
         fontFamily: 'Arial, sans-serif', 
