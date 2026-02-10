@@ -155,93 +155,104 @@ function App() {
   }
   function deg2rad(deg) { return deg * (Math.PI/180) }
 
-  // --- TITLE SCREEN: PISCES THEME ---
+  // --- TITLE SCREEN: PISCES THEME (SCROLL SAFE) ---
   if (!gameStarted) {
     return (
       <div style={{
-        minHeight: '100dvh', 
-        width: '100vw', 
-        position: 'fixed', 
-        top: 0, 
-        left: 0,
-        // Pisces Gradient: Teal -> Deep Ocean Blue -> Purple
-        background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'space-evenly', 
-        alignItems: 'center',
-        textAlign: 'center', 
-        fontFamily: 'Arial, sans-serif', 
+        position: 'fixed',
+        inset: 0, // Locks to all 4 corners
+        background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)',
         zIndex: 9999,
-        padding: '20px',
-        overflowY: 'auto',
-        color: 'white'
+        overflowY: 'auto', // <--- ENABLES SCROLLING
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
       }}>
         
-        {/* Pisces Symbol (Floating Animation) */}
-        <div className="floating-element" style={{
-          fontSize: '5rem',
-          marginBottom: '20px',
-          textShadow: '0 0 20px rgba(255,255,255,0.6)'
-        }}>
-          ♓
-        </div>
-
-        <h1 style={{ 
-          fontSize: '3rem', 
-          fontWeight: 'bold',
-          marginBottom: '10px',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-          letterSpacing: '2px'
-        }}>
-          Faye's<br/>Birthday<br/>Hunt
-        </h1>
-
+        {/* Scrollable Content Wrapper */}
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.15)', // Glassmorphism effect
-          backdropFilter: 'blur(5px)',
-          padding: '20px',
-          borderRadius: '15px',
-          marginBottom: '40px',
-          maxWidth: '300px',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
+          minHeight: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center', // Centers vertically if screen is big
+          alignItems: 'center',
+          padding: '40px 20px', // Safe zone padding
+          boxSizing: 'border-box'
         }}>
-          <h2 style={{ 
-            fontSize: '1.4rem', 
-            margin: '0 0 10px 0',
-            color: '#E0F7FA' // Light Cyan
-          }}>
-            Happy 30th Birthday boo!
-          </h2>
-          <p style={{ 
-            fontSize: '1rem', 
-            margin: 0, 
-            opacity: 0.9, 
-            lineHeight: '1.5' 
-          }}>
-            I hope you enjoy this little adventure.<br/> You deserve it!
-          </p>
-        </div>
 
-        <button 
-          className="glow-button"
-          onClick={() => setGameStarted(true)}
-          style={{
-            padding: '18px 40px', 
-            fontSize: '1.2rem', 
-            backgroundColor: 'white', 
-            color: '#185a9d', // Matches the deep blue background
-            border: 'none', 
-            borderRadius: '50px', 
-            fontWeight: 'bold', 
-            cursor: 'pointer',
-            transition: 'transform 0.2s',
-            textTransform: 'uppercase',
-            letterSpacing: '1px'
-          }}
-        >
-          Press start to begin
-        </button>
+          {/* Pisces Symbol */}
+          <div className="floating-element" style={{
+            fontSize: '5rem',
+            marginBottom: '20px',
+            textShadow: '0 0 20px rgba(255,255,255,0.6)'
+          }}>
+            ♓
+          </div>
+
+          <h1 style={{ 
+            fontSize: '3rem', 
+            fontWeight: 'bold',
+            marginBottom: '20px',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+            letterSpacing: '2px',
+            color: 'white',
+            textAlign: 'center',
+            lineHeight: '1.2'
+          }}>
+            Faye's<br/>Birthday<br/>Hunt
+          </h1>
+
+          <div style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(5px)',
+            padding: '25px',
+            borderRadius: '15px',
+            marginBottom: '40px',
+            maxWidth: '320px', // Slightly wider for your new text
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            textAlign: 'center'
+          }}>
+            <h2 style={{ 
+              fontSize: '1.4rem', 
+              margin: '0 0 10px 0',
+              color: '#E0F7FA'
+            }}>
+              Happy 30th Birthday boo!
+            </h2>
+            <p style={{ 
+              fontSize: '1.1rem', // Slightly larger font for readability
+              margin: 0, 
+              opacity: 0.95, 
+              lineHeight: '1.6',
+              color: 'white'
+            }}>
+              I hope you enjoy this little adventure.<br/> You deserve it!
+            </p>
+          </div>
+
+          <button 
+            className="glow-button"
+            onClick={() => setGameStarted(true)}
+            style={{
+              padding: '20px 40px', // Bigger touch target
+              fontSize: '1.2rem', 
+              backgroundColor: 'white', 
+              color: '#185a9d', 
+              border: 'none', 
+              borderRadius: '50px', 
+              fontWeight: 'bold', 
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+              marginBottom: '20px' // Extra space at bottom
+            }}
+          >
+            Press start to begin
+          </button>
+          
+        </div>
       </div>
     );
   }
