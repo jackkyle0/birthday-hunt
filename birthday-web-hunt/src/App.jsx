@@ -171,7 +171,7 @@ function App() {
             padding: '15px 50px',
             fontSize: '1.5rem',
             backgroundColor: 'white',
-            color: '#1b6fa0',
+            color: '#50a5d6',
             border: 'none',
             borderRadius: '50px',
             fontWeight: 'bold',
