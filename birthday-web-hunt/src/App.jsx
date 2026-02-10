@@ -127,7 +127,6 @@ function App() {
 
       if (d < 15 && !found) { 
         setFound(true);
-        alert(`🎉 FOUND IT! \n\n${target.unlockMessage}`);
       }
     }
   }, [userPos, currentStage]);
@@ -278,8 +277,7 @@ function App() {
           center={[userPos.lat, userPos.lng]} 
           zoom={16} 
           style={{ height: "100%", width: "100%" }}
-          zoomControl={false} // Hides the +/- buttons
-          // When she drags the map, stop following her
+          zoomControl={false} 
           onDragstart={() => setFollowMode(false)}
         >
           <TileLayer
@@ -289,7 +287,6 @@ function App() {
           
           <MapController userPos={userPos} followMode={followMode} />
 
-          {/* Replaced standard marker with GPS Icon */}
           <Marker position={[userPos.lat, userPos.lng]} icon={gpsIcon}>
              <Popup>You are here</Popup>
           </Marker>
@@ -302,26 +299,75 @@ function App() {
         </MapContainer>
       </div>
 
-      {/* CLUE CARD */}
+      {/* --- NEW CLUE CARD (FIXED) --- */}
       <div style={{ 
-        height: "30%", backgroundColor: "white", padding: "20px", 
-        boxShadow: "0 -2px 10px rgba(0,0,0,0.1)", zIndex: 1000, textAlign: "center",
-        borderTopLeftRadius: "20px", borderTopRightRadius: "20px"
+        position: "absolute",  // <--- KEY FIX: Floats over the map
+        bottom: 0,             // <--- KEY FIX: Anchored to bottom
+        left: 0,
+        right: 0,
+        maxHeight: "60vh",     // <--- KEY FIX: Can grow if text is long
+        backgroundColor: "white", 
+        padding: "20px", 
+        paddingBottom: "40px", // <--- KEY FIX: Space for iPhone Home Bar
+        boxShadow: "0 -5px 20px rgba(0,0,0,0.15)", 
+        zIndex: 1000, 
+        textAlign: "center",
+        borderTopLeftRadius: "25px", 
+        borderTopRightRadius: "25px",
+        overflowY: "auto",      // <--- KEY FIX: Scrollable if too big
+        transition: "height 0.3s ease-out" 
       }}>
-        <h2 style={{margin: "0 0 10px 0", color: "#d63384"}}>Clue #{currentStage + 1}</h2>
-        <p style={{fontSize: "1.1rem"}}>{target.clue}</p>
-        <p style={{color: "#666", fontStyle: "italic"}}>
+        <h2 style={{margin: "0 0 10px 0", color: "#d63384"}}>
+          Clue #{currentStage + 1}
+        </h2>
+        
+        <p style={{fontSize: "1.1rem", lineHeight: "1.5", marginBottom: "10px"}}>
+          {target.clue}
+        </p>
+        
+        <p style={{color: "#666", fontStyle: "italic", marginBottom: "15px"}}>
           Distance: {distance ? `${distance}m` : "Calculating..."}
         </p>
 
         {found && (
-          <button 
-            onClick={nextStage}
-            style={{
-              marginTop: "10px", padding: "10px 20px", backgroundColor: "#d63384",
-              color: "white", border: "none", borderRadius: "5px", fontSize: "1rem"
-            }}
-          >Next Clue →</button>
+          <div style={{
+            marginTop: "15px",
+            padding: "15px",
+            backgroundColor: "#fff0f6", 
+            borderRadius: "10px",
+            border: "1px solid #ffadd2",
+            animation: "float 0.5s ease-out"
+          }}>
+            <p style={{
+              fontWeight: "bold", 
+              color: "#d63384", 
+              marginBottom: "10px",
+              fontSize: "1.1rem"
+            }}>
+              🎉 FOUND IT!<br/>
+              <span style={{fontWeight: "normal", color: "#333"}}>
+                {target.unlockMessage}
+              </span>
+            </p>
+            
+            <button 
+              onClick={nextStage}
+              style={{
+                width: "100%",
+                padding: "15px 0",
+                backgroundColor: "#d63384",
+                color: "white",
+                border: "none",
+                borderRadius: "50px",
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+                boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)",
+                cursor: "pointer"
+              }}
+            >
+              Next Clue →
+            </button>
+          </div>
         )}
       </div>
     </div>
