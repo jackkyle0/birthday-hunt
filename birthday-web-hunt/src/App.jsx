@@ -75,7 +75,7 @@ const gpsIcon = L.divIcon({
 });
 
 // 2. Component to handle "Fly To" animation
-function MapController({ userPos, followMode }) {
+function MapController({ userPos, followMode, setFollowMode }) {
   const map = useMap();
 
   // Listen for user dragging the map
