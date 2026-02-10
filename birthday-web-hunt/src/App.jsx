@@ -3,17 +3,17 @@ import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-le
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// // Fix for default marker icon in Leaflet
-// import icon from 'leaflet/dist/images/marker-icon.png';
-// import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+// Fix for default marker icon in Leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// let DefaultIcon = L.icon({
-//     iconUrl: icon,
-//     shadowUrl: iconShadow,
-//     iconSize: [25, 41],
-//     iconAnchor: [12, 41]
-// });
-// L.Marker.prototype.options.icon = DefaultIcon;
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 // --- CONFIGURATION: YOUR REAL LOCATIONS GO HERE ---
 const LOCATIONS = [
@@ -77,6 +77,17 @@ const gpsIcon = L.divIcon({
 // 2. Component to handle "Fly To" animation
 function MapController({ userPos, followMode }) {
   const map = useMap();
+
+  // Listen for user dragging the map
+  useMapEvents({
+    dragstart: () => {
+      setFollowMode(false); // Stop following immediately
+    },
+    touchstart: () => {
+      // Optional: Stop following as soon as they touch the screen
+      setFollowMode(false); 
+    }
+  });
   
   useEffect(() => {
     if (userPos && followMode) {
@@ -256,7 +267,6 @@ function App() {
     );
   }
 
-  // --- GAME SCREEN ---
   if (!userPos) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><h2>📍 Locating...</h2></div>;
 
   const target = LOCATIONS[currentStage];
@@ -278,14 +288,14 @@ function App() {
           zoom={16} 
           style={{ height: "100%", width: "100%" }}
           zoomControl={false} 
-          onDragstart={() => setFollowMode(false)}
+          attributionControl={false}
         >
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             attribution='&copy; OpenStreetMap'
           />
           
-          <MapController userPos={userPos} followMode={followMode} />
+          <MapController userPos={userPos} followMode={followMode} setFollowMode={setFollowMode} />
 
           <Marker position={[userPos.lat, userPos.lng]} icon={gpsIcon}>
              <Popup>You are here</Popup>
@@ -299,23 +309,13 @@ function App() {
         </MapContainer>
       </div>
 
-      {/* --- NEW CLUE CARD (FIXED) --- */}
+      {/* CLUE CARD */}
       <div style={{ 
-        position: "absolute",  // <--- KEY FIX: Floats over the map
-        bottom: 0,             // <--- KEY FIX: Anchored to bottom
-        left: 0,
-        right: 0,
-        maxHeight: "60vh",     // <--- KEY FIX: Can grow if text is long
-        backgroundColor: "white", 
-        padding: "20px", 
-        paddingBottom: "40px", // <--- KEY FIX: Space for iPhone Home Bar
-        boxShadow: "0 -5px 20px rgba(0,0,0,0.15)", 
-        zIndex: 1000, 
-        textAlign: "center",
-        borderTopLeftRadius: "25px", 
-        borderTopRightRadius: "25px",
-        overflowY: "auto",      // <--- KEY FIX: Scrollable if too big
-        transition: "height 0.3s ease-out" 
+        position: "absolute", bottom: 0, left: 0, right: 0,
+        maxHeight: "60vh", backgroundColor: "white", padding: "20px", paddingBottom: "40px",
+        boxShadow: "0 -5px 20px rgba(0,0,0,0.15)", zIndex: 1000, textAlign: "center",
+        borderTopLeftRadius: "25px", borderTopRightRadius: "25px",
+        overflowY: "auto", transition: "height 0.3s ease-out" 
       }}>
         <h2 style={{margin: "0 0 10px 0", color: "#d63384"}}>
           Clue #{currentStage + 1}
@@ -331,38 +331,20 @@ function App() {
 
         {found && (
           <div style={{
-            marginTop: "15px",
-            padding: "15px",
-            backgroundColor: "#fff0f6", 
-            borderRadius: "10px",
-            border: "1px solid #ffadd2",
-            animation: "float 0.5s ease-out"
+            marginTop: "15px", padding: "15px", backgroundColor: "#fff0f6", 
+            borderRadius: "10px", border: "1px solid #ffadd2", animation: "float 0.5s ease-out"
           }}>
-            <p style={{
-              fontWeight: "bold", 
-              color: "#d63384", 
-              marginBottom: "10px",
-              fontSize: "1.1rem"
-            }}>
+            <p style={{ fontWeight: "bold", color: "#d63384", marginBottom: "10px", fontSize: "1.1rem" }}>
               🎉 FOUND IT!<br/>
-              <span style={{fontWeight: "normal", color: "#333"}}>
-                {target.unlockMessage}
-              </span>
+              <span style={{fontWeight: "normal", color: "#333"}}>{target.unlockMessage}</span>
             </p>
             
             <button 
               onClick={nextStage}
               style={{
-                width: "100%",
-                padding: "15px 0",
-                backgroundColor: "#d63384",
-                color: "white",
-                border: "none",
-                borderRadius: "50px",
-                fontSize: "1.1rem",
-                fontWeight: "bold",
-                boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)",
-                cursor: "pointer"
+                width: "100%", padding: "15px 0", backgroundColor: "#d63384",
+                color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem",
+                fontWeight: "bold", boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)", cursor: "pointer"
               }}
             >
               Next Clue →
