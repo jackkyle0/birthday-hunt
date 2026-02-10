@@ -159,22 +159,23 @@ function App() {
   if (!gameStarted) {
     return (
       <div style={{
-        minHeight: '100dvh',  // Changed from 'height' to 'minHeight' so it can grow
+        minHeight: '100dvh', 
         width: '100vw', 
         position: 'fixed', 
         top: 0, 
         left: 0,
+        // Pisces Gradient: Teal -> Deep Ocean Blue -> Purple
         background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', 
         display: 'flex', 
         flexDirection: 'column', 
-        justifyContent: 'space-evenly', // Changed from 'center' to spread items out
+        justifyContent: 'center', 
         alignItems: 'center',
         textAlign: 'center', 
         fontFamily: 'Arial, sans-serif', 
         zIndex: 9999,
         padding: '20px',
-        boxSizing: 'border-box', // Ensures padding doesn't push width out
-        overflowY: 'auto'       // Allows scrolling if the screen is tiny
+        overflowY: 'auto',
+        color: 'white'
       }}>
         
         {/* Pisces Symbol (Floating Animation) */}
