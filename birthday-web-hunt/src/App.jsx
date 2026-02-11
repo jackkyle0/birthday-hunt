@@ -221,24 +221,32 @@ function App() {
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, position: 'relative' }}>
+        
+        {
+          
+        }
         <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 1001, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {/* UPDATED BUTTON STYLE BELOW FOR CENTERING */}
-          <button onClick={() => setShowMenu(true)} style={{ 
-            width: '50px', 
-            height: '50px', 
-            borderRadius: '50%', 
-            border: 'none', 
-            background: 'white', 
-            fontSize: '24px', 
-            boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-            display: 'flex',            // <--- Added for centering
-            justifyContent: 'center',   // <--- Added for centering
-            alignItems: 'center',       // <--- Added for centering
-            padding: 0                  // <--- Added for centering
-          }}>📜</button>
-        </div>
+          
+          {
 
-        <button className="recenter-btn" onClick={() => setFollowMode(true)} style={{ color: followMode ? '#4285F4' : '#666' }}>➤</button>
+          }
+          <button onClick={() => setShowMenu(true)} style={{ 
+            width: '50px', height: '50px', borderRadius: '50%', border: 'none', background: 'white', fontSize: '24px', boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 
+          }}>📋</button>
+
+          {
+
+          }
+          <button onClick={() => setFollowMode(true)} style={{ 
+            width: '50px', height: '50px', borderRadius: '50%', border: 'none', background: 'white', fontSize: '24px', boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0,
+            color: followMode ? '#4285F4' : '#666'
+          }}>➤</button>
+
+          
+
+        </div>
 
         <MapContainer center={[userPos.lat, userPos.lng]} zoom={16} style={{ height: "100%", width: "100%" }} zoomControl={false} attributionControl={false}>
           <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" attribution='&copy; OpenStreetMap' />
