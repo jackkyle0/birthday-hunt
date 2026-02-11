@@ -7,7 +7,7 @@ body, html, #root {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Prevents scrolling on the map */
+  overflow: hidden;
 }
 
 /* The Blue GPS Dot */
@@ -19,11 +19,10 @@ body, html, #root {
   border-radius: 50%;
   box-shadow: 0 0 5px rgba(0,0,0,0.3);
   position: relative;
-  /* This ensures the rotation happens from the center */
   transform-origin: center center; 
 }
 
-/* The Pulsing Ring (Underneath) */
+/* The Pulsing Ring*/
 .gps-puck::after {
   content: '';
   position: absolute;
@@ -36,18 +35,18 @@ body, html, #root {
   z-index: -2;
 }
 
-/* THE NEW DIRECTION BEAM (Flashlight effect) */
+/* Direction arrow*/
 .gps-arrow {
   content: '';
   position: absolute;
-  bottom: 100%; /* Sits on top of the dot */
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   width: 0; 
   height: 0; 
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 15px solid #4285F4; /* The arrow color */
+  border-bottom: 15px solid #4285F4;
   border-radius: 5px;
 }
 
@@ -72,7 +71,7 @@ body, html, #root {
 /* Floating Recenter Button */
 .recenter-btn {
   position: absolute;
-  bottom: 220px; /* Above the card */
+  bottom: 220px;
   right: 20px;
   background: white;
   border: none;
@@ -84,11 +83,11 @@ body, html, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* On top of map */
+  z-index: 999; 
   cursor: pointer;
 }
 
-/* Pisces Animations */
+/* Pisces Animation */
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-15px); }

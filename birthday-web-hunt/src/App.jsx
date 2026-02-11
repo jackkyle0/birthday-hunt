@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup, Circle, useMap, useMapEvents } 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Fix for default marker icon in Leaflet
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
@@ -15,7 +14,7 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// --- CONFIGURATION: YOUR REAL LOCATIONS GO HERE ---
+// Locations
 const LOCATIONS = [
   {
     id: 1,
@@ -37,32 +36,32 @@ const LOCATIONS = [
     id: 3,
     title: "Spot #3",
     clue: "Next stop... Muffin time",
-    lat: 51.515, // <--- REPLACE WITH YOUR LATITUDE
-    lng: -0.10,  // <--- REPLACE WITH YOUR LONGITUDE
+    lat: 51.515, 
+    lng: -0.10,  
     unlockMessage: "Those trash walks got me worried -> Check under the seat!",
   },
   {
     id: 4,
     title: "Spot #4",
     clue: "Our favourite coffee spot? I'll drive",
-    lat: 51.515, // <--- REPLACE WITH YOUR LATITUDE
-    lng: -0.10,  // <--- REPLACE WITH YOUR LONGITUDE
+    lat: 51.515,
+    lng: -0.10,  
     unlockMessage: "The password is MELON",
   },
   {
     id: 5,
     title: "Spot #5",
     clue: "Our usual camping spot?",
-    lat: 51.515, // <--- REPLACE WITH YOUR LATITUDE
-    lng: -0.10,  // <--- REPLACE WITH YOUR LONGITUDE
+    lat: 51.515,
+    lng: -0.10,
     unlockMessage: "",
   },
   {
     id: 6,
     title: "The Last Spot",
     clue: "I know the sunrise is hard for me, how do you feel about sunset?",
-    lat: 51.515, // <--- REPLACE WITH YOUR LATITUDE
-    lng: -0.10,  // <--- REPLACE WITH YOUR LONGITUDE
+    lat: 51.515,
+    lng: -0.10,
     unlockMessage: "Woops I dropped it in the ocean tehe",
   }
 ];
@@ -98,7 +97,7 @@ function App() {
   });
 
   const [userPos, setUserPos] = useState(null);
-  const [heading, setHeading] = useState(0); // <--- NEW: Tracks compass direction
+  const [heading, setHeading] = useState(0); 
   const [distance, setDistance] = useState(null);
   const [found, setFound] = useState(false);
   const [followMode, setFollowMode] = useState(true);
@@ -109,11 +108,10 @@ function App() {
     localStorage.setItem('gameStarted', gameStarted);
   }, [currentStage, gameStarted]);
 
-  // --- COMPASS & LOCATION LOGIC ---
+  // Compass and location logic
   const handleStartGame = () => {
     setGameStarted(true);
 
-    // 1. Request Compass Permission (iOS 13+)
     if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
       DeviceOrientationEvent.requestPermission()
         .then(response => {
@@ -123,7 +121,6 @@ function App() {
         })
         .catch(console.error);
     } else {
-      // Android / Older iOS (No permission needed)
       window.addEventListener('deviceorientation', handleOrientation);
     }
   };
@@ -134,7 +131,7 @@ function App() {
       // iOS
       compass = event.webkitCompassHeading;
     } else if (event.alpha) {
-      // Android (approximate)
+      // Android
       compass = 360 - event.alpha;
     }
     setHeading(compass);
@@ -161,7 +158,7 @@ function App() {
       const target = LOCATIONS[currentStage];
       const d = getDistanceFromLatLonInMeters(userPos.lat, userPos.lng, target.lat, target.lng);
       setDistance(Math.floor(d));
-      if (d < 15 && !found) setFound(true);
+      if (d < 10 && !found) setFound(true);
     }
   }, [userPos, currentStage]);
 
@@ -175,10 +172,8 @@ function App() {
     }
   };
 
-  // DYNAMIC COMPASS ICON
-  // We recreate the icon whenever 'heading' changes
   const gpsIcon = L.divIcon({
-    className: 'gps-wrapper', // Empty wrapper
+    className: 'gps-wrapper', 
     html: `<div class="gps-puck" style="transform: rotate(${heading}deg);">
              <div class="gps-arrow"></div>
            </div>`,
@@ -186,7 +181,7 @@ function App() {
     iconAnchor: [15, 15]
   });
 
-  // Emergency Menu Logic
+  // Menu Logic
   const jumpToStage = (index) => {
     if (window.confirm(`Skip to Clue #${index + 1}?`)) {
       setCurrentStage(index); setFound(false); setShowMenu(false); setFollowMode(true);
@@ -201,7 +196,6 @@ function App() {
   }
   function deg2rad(deg) { return deg * (Math.PI/180) }
 
-  // --- UI RENDER ---
   if (!gameStarted) {
     return (
       <div style={{ position: 'fixed', inset: 0, background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', zIndex: 9999, overflowY: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -213,7 +207,6 @@ function App() {
             <p style={{ fontSize: '1.1rem', margin: 0, opacity: 0.95, lineHeight: '1.6', color: 'white' }}>I hope you enjoy this little adventure.<br/> You deserve it!</p>
           </div>
           
-          {/* UPDATED: Calling handleStartGame to trigger permissions */}
           <button className="glow-button" onClick={handleStartGame} style={{ padding: '20px 40px', fontSize: '1.2rem', backgroundColor: 'white', color: '#185a9d', border: 'none', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '1px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', marginBottom: '20px' }}>
             {currentStage > 0 ? "Resume Hunt →" : "Start Adventure →"}
           </button>
@@ -229,7 +222,20 @@ function App() {
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, position: 'relative' }}>
         <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 1001, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <button onClick={() => setShowMenu(true)} style={{ width: '50px', height: '50px', borderRadius: '50%', border: 'none', background: 'white', fontSize: '24px', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>📜</button>
+          {/* UPDATED BUTTON STYLE BELOW FOR CENTERING */}
+          <button onClick={() => setShowMenu(true)} style={{ 
+            width: '50px', 
+            height: '50px', 
+            borderRadius: '50%', 
+            border: 'none', 
+            background: 'white', 
+            fontSize: '24px', 
+            boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+            display: 'flex',            // <--- Added for centering
+            justifyContent: 'center',   // <--- Added for centering
+            alignItems: 'center',       // <--- Added for centering
+            padding: 0                  // <--- Added for centering
+          }}>📜</button>
         </div>
 
         <button className="recenter-btn" onClick={() => setFollowMode(true)} style={{ color: followMode ? '#4285F4' : '#666' }}>➤</button>
@@ -238,7 +244,6 @@ function App() {
           <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" attribution='&copy; OpenStreetMap' />
           <MapController userPos={userPos} followMode={followMode} setFollowMode={setFollowMode} />
           
-          {/* UPDATED: Dynamic GPS Icon with Rotation */}
           <Marker position={[userPos.lat, userPos.lng]} icon={gpsIcon}>
              <Popup>You</Popup>
           </Marker>
