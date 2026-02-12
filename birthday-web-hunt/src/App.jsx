@@ -36,8 +36,8 @@ const LOCATIONS = [
     id: 3,
     title: "Spot #3",
     clue: "Next stop... Uni time",
-    lat: 55.0062, 
-    lng: 7.3236,  
+    lat: 55.006362071393966, 
+    lng: -7.3236095231902745, 
     unlockMessage: "Those trash walks got me worried -> Check under the seat!",
   },
   {
