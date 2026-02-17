@@ -19,9 +19,9 @@ const LOCATIONS = [
   {
     id: 1,
     title: "The First Clue",
-    clue: "Its right here at home, did you hear the tooth fairy last night?",
-    lat: 55.00035940989179, 
-    lng: -7.269740014899537,
+    clue: "Did you hear the tooth fairy last night?",
+    lat: 55.0003425, 
+    lng: -7.2697031,
     unlockMessage: "Willow _____",
   },
   {
@@ -35,34 +35,34 @@ const LOCATIONS = [
   {
     id: 3,
     title: "Spot #3",
-    clue: "Next stop... Uni time",
-    lat: 55.006362071393966, 
-    lng: -7.3236095231902745, 
-    unlockMessage: "Those trash walks got me worried -> Check under the seat!",
+    clue: "When life gets you down, do you wanna know what you've got to do?",
+    lat: 55.03201161079957, 
+    lng: -7.218460382762363, 
+    unlockMessage: "Just keep swimming!",
   },
   {
     id: 4,
     title: "Spot #4",
-    clue: "Our favourite coffee spot? I'll drive",
-    lat: 51.515,
-    lng: -0.10,  
-    unlockMessage: "The password is MELON",
+    clue: "Red cat, yellow cat, blue cat, _____ ___",
+    lat: 55.027506866347316,
+    lng: -7.175258087002675,  
+    unlockMessage: "Meow x",
   },
   {
     id: 5,
     title: "Spot #5",
-    clue: "Our usual camping spot?",
-    lat: 51.515,
-    lng: -0.10,
-    unlockMessage: "",
+    clue: "An hour break at work? It's so good cause you can just...",
+    lat: 54.99604098906285,
+    lng: -7.318975368799344,
+    unlockMessage: "Too old to be drinking here now...",
   },
   {
     id: 6,
     title: "The Last Spot",
-    clue: "I know the sunrise is hard for me, how do you feel about sunset?",
-    lat: 51.515,
-    lng: -0.10,
-    unlockMessage: "Woops I dropped it in the ocean tehe",
+    clue: "Happy Hour instead?",
+    lat: 54.996206203370136,
+    lng:  -7.317501430430367,
+    unlockMessage: "A wee sneaky birthday one? Don't worry I'll drive lol",
   }
 ];
 
@@ -158,7 +158,7 @@ function App() {
       const target = LOCATIONS[currentStage];
       const d = getDistanceFromLatLonInMeters(userPos.lat, userPos.lng, target.lat, target.lng);
       setDistance(Math.floor(d));
-      if (d < 10 && !found) setFound(true);
+      if (d < 5 && !found) setFound(true);
     }
   }, [userPos, currentStage]);
 
