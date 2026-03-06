@@ -29,7 +29,7 @@ const LOCATIONS = [
     id: 2,
     title: "Spot #2",
     clue: "Is it Spring already?",
-    hint: "In the ground, near the left pole",
+    hint: "In the ground, near the right pole",
     lat: 55.00,
     lng: -7.268305,
     unlockMessage: "Buttons said she loves the spring lambs",
@@ -243,7 +243,7 @@ function App() {
     return (
       <div style={{ position: 'fixed', inset: 0, background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', zIndex: 9999, overflowY: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ minHeight: '100%', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px 20px', boxSizing: 'border-box' }}>
-          <div className="floating-element" style={{ fontSize: '6rem', marginBottom: '20px', textShadow: '0 0 20px rgba(255,255,255,0.6)' }}>🎉</div>
+          <div className="floating-element" style={{ fontSize: '6rem', marginBottom: '20px', textShadow: '0 0 20px rgba(255,255,255,0.6)' }}></div>
           <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '20px', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', letterSpacing: '2px', color: 'white', textAlign: 'center', lineHeight: '1.2' }}>YOU DID IT!</h1>
           
           <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(5px)', padding: '30px', borderRadius: '15px', marginBottom: '40px', maxWidth: '320px', border: '1px solid rgba(255, 255, 255, 0.2)', textAlign: 'center' }}>
