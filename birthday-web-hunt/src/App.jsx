@@ -14,7 +14,7 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Locations 
+// Locations
 const LOCATIONS = [
   {
     id: 1,
@@ -106,6 +106,7 @@ function MapController({ userPos, followMode, setFollowMode }) {
 
 function App() {
   const [gameStarted, setGameStarted] = useState(() => localStorage.getItem('gameStarted') === 'true');
+  const [gameCompleted, setGameCompleted] = useState(() => localStorage.getItem('gameCompleted') === 'true'); // NEW STATE
   const [currentStage, setCurrentStage] = useState(() => {
     const saved = localStorage.getItem('currentStage');
     return saved ? parseInt(saved) : 0;
@@ -118,16 +119,15 @@ function App() {
   const [followMode, setFollowMode] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   
-  // NEW STATES for hints and range detection
   const [showHint, setShowHint] = useState(false);
   const [inRange, setInRange] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('currentStage', currentStage);
     localStorage.setItem('gameStarted', gameStarted);
-  }, [currentStage, gameStarted]);
+    localStorage.setItem('gameCompleted', gameCompleted); // SAVE VICTORY STATE
+  }, [currentStage, gameStarted, gameCompleted]);
 
-  // Compass and location logic
   const handleStartGame = () => {
     setGameStarted(true);
 
@@ -154,9 +154,8 @@ function App() {
     setHeading(compass);
   };
 
-  // Location Tracking
   useEffect(() => {
-    if (!gameStarted) return;
+    if (!gameStarted || gameCompleted) return; // Stop tracking if game is over
     if (!navigator.geolocation) { alert("Geolocation not supported"); return; }
     
     const watchId = navigator.geolocation.watchPosition(
@@ -167,34 +166,33 @@ function App() {
       { enableHighAccuracy: true, maximumAge: 0 }
     );
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [gameStarted]);
+  }, [gameStarted, gameCompleted]);
 
-  // Distance Check (UPDATED LOGIC)
   useEffect(() => {
-    if (userPos && currentStage < LOCATIONS.length) {
+    if (userPos && currentStage < LOCATIONS.length && !gameCompleted) {
       const target = LOCATIONS[currentStage];
       const d = getDistanceFromLatLonInMeters(userPos.lat, userPos.lng, target.lat, target.lng);
       setDistance(Math.floor(d));
       
-      // If she is within 5 meters, activate the "Found It" text zone
       if (d <= 5) {
         setInRange(true);
       } else {
         setInRange(false);
       }
     }
-  }, [userPos, currentStage]);
+  }, [userPos, currentStage, gameCompleted]);
 
   const nextStage = () => {
     setFound(false);
-    setShowHint(false); // Reset hint for next stage
-    setInRange(false);  // Reset range for next stage
+    setShowHint(false); 
+    setInRange(false);  
     
     if (currentStage + 1 < LOCATIONS.length) {
       setCurrentStage(currentStage + 1);
       setFollowMode(true);
     } else {
-      alert("YOU WIN! Happy Birthday! I love you so much my beautiful fiancé <3");
+      // TRIGGER VICTORY SCREEN INSTEAD OF ALERT
+      setGameCompleted(true);
     }
   };
 
@@ -207,7 +205,6 @@ function App() {
     iconAnchor: [15, 15]
   });
 
-  // Menu Logic
   const jumpToStage = (index) => {
     if (window.confirm(`Skip to Clue #${index + 1}?`)) {
       setCurrentStage(index); setFound(false); setShowHint(false); setShowMenu(false); setFollowMode(true);
@@ -222,6 +219,7 @@ function App() {
   }
   function deg2rad(deg) { return deg * (Math.PI/180) }
 
+  // --- 1. TITLE SCREEN ---
   if (!gameStarted) {
     return (
       <div style={{ position: 'fixed', inset: 0, background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', zIndex: 9999, overflowY: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -240,6 +238,30 @@ function App() {
     );
   }
 
+  // --- 2. VICTORY SCREEN ---
+  if (gameCompleted) {
+    return (
+      <div style={{ position: 'fixed', inset: 0, background: 'linear-gradient(to bottom, #43cea2 0%, #185a9d 100%)', zIndex: 9999, overflowY: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ minHeight: '100%', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px 20px', boxSizing: 'border-box' }}>
+          <div className="floating-element" style={{ fontSize: '6rem', marginBottom: '20px', textShadow: '0 0 20px rgba(255,255,255,0.6)' }}>🎉</div>
+          <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '20px', textShadow: '2px 2px 4px rgba(0,0,0,0.3)', letterSpacing: '2px', color: 'white', textAlign: 'center', lineHeight: '1.2' }}>YOU DID IT!</h1>
+          
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(5px)', padding: '30px', borderRadius: '15px', marginBottom: '40px', maxWidth: '320px', border: '1px solid rgba(255, 255, 255, 0.2)', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '1.6rem', margin: '0 0 15px 0', color: '#E0F7FA' }}>Happy Birthday!</h2>
+            <p style={{ fontSize: '1.2rem', margin: 0, opacity: 1, lineHeight: '1.6', color: 'white', fontWeight: 'bold' }}>
+              I love you so much my beautiful fiancé ❤️
+            </p>
+          </div>
+          
+          <button onClick={resetGame} style={{ padding: '10px 20px', fontSize: '0.9rem', backgroundColor: 'transparent', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '50px', cursor: 'pointer' }}>
+            Reset Game
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- 3. MAIN GAME SCREEN ---
   if (!userPos) return <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><h2>📍 Locating...</h2></div>;
   const target = LOCATIONS[currentStage];
 
@@ -270,18 +292,15 @@ function App() {
 
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, maxHeight: "65vh", backgroundColor: "white", padding: "20px", paddingBottom: "40px", boxShadow: "0 -5px 20px rgba(0,0,0,0.15)", zIndex: 1000, textAlign: "center", borderTopLeftRadius: "25px", borderTopRightRadius: "25px", overflowY: "auto", transition: "height 0.3s ease-out" }}>
         
-        {/* ONLY SHOW THIS IF SHE HASN'T FOUND IT YET */}
         {!found && (
           <>
             <h2 style={{margin: "0 0 10px 0", color: "#d63384"}}>Clue #{currentStage + 1}</h2>
             <p style={{fontSize: "1.1rem", lineHeight: "1.5", marginBottom: "15px"}}>{target.clue}</p>
             
-            {/* Distance Indicator */}
             <p style={{color: inRange ? "#43cea2" : "#666", fontStyle: "italic", fontWeight: inRange ? "bold" : "normal", marginBottom: "15px"}}>
-              {inRange ? "📍 You are in the Search Zone!" : `Distance: ${distance ? distance + 'm' : "Calculating..."}`}
+              {inRange ? "📍 You're in the Search Area!" : `Distance: ${distance ? distance + 'm' : "Calculating..."}`}
             </p>
 
-            {/* Hint Section */}
             <div style={{ marginBottom: "20px" }}>
               {!showHint ? (
                 <button onClick={() => setShowHint(true)} style={{ background: "none", border: "1px solid #d63384", color: "#d63384", padding: "8px 15px", borderRadius: "20px", fontSize: "0.9rem", cursor: "pointer" }}>
@@ -294,24 +313,22 @@ function App() {
               )}
             </div>
 
-            {/* "I FOUND IT" Button - ALWAYS VISIBLE NOW */}
             <button onClick={() => setFound(true)} style={{ width: "100%", padding: "15px 0", backgroundColor: "#d63384", color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)", cursor: "pointer", marginTop: "10px" }}>
-              I Found the Capsule!
+              I Found it!
             </button>
           </>
         )}
 
-        {/* SHOW THIS AFTER SHE CLICKS "I FOUND IT" */}
         {found && (
           <div style={{ marginTop: "5px", padding: "15px", backgroundColor: "#fff0f6", borderRadius: "10px", border: "1px solid #ffadd2", animation: "float 0.5s ease-out" }}>
             <p style={{ fontWeight: "bold", color: "#d63384", marginBottom: "10px", fontSize: "1.2rem" }}>
-              🎉 CAPSULE UNLOCKED!<br/>
+              CAPSULE FOUND!<br/>
               <span style={{fontWeight: "normal", color: "#333", fontSize: "1.1rem", display: "block", marginTop: "10px"}}>
                 "{target.unlockMessage}"
               </span>
             </p>
             <button onClick={nextStage} style={{ width: "100%", padding: "15px 0", backgroundColor: "#d63384", color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)", cursor: "pointer", marginTop: "10px" }}>
-              Next Clue →
+              {currentStage + 1 < LOCATIONS.length ? "Next Clue →" : "Finish Hunt 🎉"}
             </button>
           </div>
         )}
