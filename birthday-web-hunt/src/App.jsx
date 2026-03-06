@@ -297,7 +297,7 @@ function App() {
             {/* "I FOUND IT" Button - Only appears when within 5 meters */}
             {inRange && (
               <button onClick={() => setFound(true)} style={{ width: "100%", padding: "15px 0", backgroundColor: "#43cea2", color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(67, 206, 162, 0.4)", cursor: "pointer", animation: "pulse 2s infinite" }}>
-                I Found the Capsule! 🎁
+                I Found the Capsule! 
               </button>
             )}
           </>
@@ -321,4 +321,31 @@ function App() {
 
       {showMenu && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 2000, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-          <div style={{ background: 'white
+          <div style={{ background: 'white', width: '100%', maxWidth: '400px', borderRadius: '20px', padding: '20px', maxHeight: '80vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ margin: 0 }}>My Progress</h2>
+              <button onClick={() => setShowMenu(false)} style={{ border: 'none', background: 'none', fontSize: '24px' }}>✕</button>
+            </div>
+            {LOCATIONS.map((loc, index) => {
+              const isCompleted = index < currentStage;
+              const isCurrent = index === currentStage;
+              const isLocked = index > currentStage;
+              return (
+                <div key={loc.id} onClick={() => jumpToStage(index)} style={{ padding: '15px', borderRadius: '10px', marginBottom: '10px', background: isCurrent ? '#fff0f6' : '#f8f9fa', border: isCurrent ? '2px solid #d63384' : '1px solid #eee', opacity: isLocked ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: isCompleted ? '#43cea2' : (isCurrent ? '#d63384' : '#ccc'), color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold' }}>{isCompleted ? '✓' : index + 1}</div>
+                  <div><h3 style={{ margin: 0, fontSize: '1rem' }}>{loc.title}</h3><p style={{ margin: 0, fontSize: '0.8rem', color: '#666' }}>{isLocked ? "Locked" : (isCompleted ? "Found!" : "Current Objective")}</p></div>
+                </div>
+              );
+            })}
+            <div style={{ marginTop: '30px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+              <button onClick={resetGame} style={{ width: '100%', padding: '15px', background: '#333', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 'bold' }}>Reset Game</button>
+              <p style={{ fontSize: '0.8rem', color: '#999', textAlign: 'center', marginTop: '10px' }}>Tap a locked level to skip (Emergency only)</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
