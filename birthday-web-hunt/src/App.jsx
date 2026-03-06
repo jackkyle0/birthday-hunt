@@ -14,7 +14,7 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Locations (I added a 'hint' field to each one for you to fill out!)
+// Locations 
 const LOCATIONS = [
   {
     id: 1,
@@ -176,7 +176,7 @@ function App() {
       const d = getDistanceFromLatLonInMeters(userPos.lat, userPos.lng, target.lat, target.lng);
       setDistance(Math.floor(d));
       
-      // If she is within 5 meters, activate the "Found It" button zone
+      // If she is within 5 meters, activate the "Found It" text zone
       if (d <= 5) {
         setInRange(true);
       } else {
@@ -294,12 +294,10 @@ function App() {
               )}
             </div>
 
-            {/* "I FOUND IT" Button - Only appears when within 5 meters */}
-            {inRange && (
-              <button onClick={() => setFound(true)} style={{ width: "100%", padding: "15px 0", backgroundColor: "#43cea2", color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(67, 206, 162, 0.4)", cursor: "pointer", animation: "pulse 2s infinite" }}>
-                I Found the Capsule! 
-              </button>
-            )}
+            {/* "I FOUND IT" Button - ALWAYS VISIBLE NOW */}
+            <button onClick={() => setFound(true)} style={{ width: "100%", padding: "15px 0", backgroundColor: "#d63384", color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)", cursor: "pointer", marginTop: "10px" }}>
+              I Found the Capsule!
+            </button>
           </>
         )}
 
