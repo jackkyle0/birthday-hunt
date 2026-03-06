@@ -328,7 +328,7 @@ function App() {
               </span>
             </p>
             <button onClick={nextStage} style={{ width: "100%", padding: "15px 0", backgroundColor: "#d63384", color: "white", border: "none", borderRadius: "50px", fontSize: "1.1rem", fontWeight: "bold", boxShadow: "0 4px 10px rgba(214, 51, 132, 0.3)", cursor: "pointer", marginTop: "10px" }}>
-              {currentStage + 1 < LOCATIONS.length ? "Next Clue →" : "Finish Hunt 🎉"}
+              {currentStage + 1 < LOCATIONS.length ? "Next Clue →" : "Finish Game"}
             </button>
           </div>
         )}
