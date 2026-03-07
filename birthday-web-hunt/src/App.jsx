@@ -74,10 +74,10 @@ const LOCATIONS = [
     id: 7,
     title: "The Last Spot",
     clue: "Happy Hour instead?",
-    hint: "Say drinky winky in Sandys",
-    lat: 54.996206203370136,
-    lng:  -7.317501430430367,
-    unlockMessage: "A wee sneaky birthday one? Don't worry I'll drive lol",
+    hint: "Say -drinky winky- in Bennigans",
+    lat: 54.9930087608011,
+    lng: -7.318618344891218,
+    unlockMessage: "Birthday drinks in such a bluey wooey day! ENJOY!!!",
   }
 ];
 
