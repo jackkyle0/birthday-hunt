@@ -77,7 +77,7 @@ const LOCATIONS = [
     hint: "Say -drinky winky- in Bennigans",
     lat: 54.9930087608011,
     lng: -7.318618344891218,
-    unlockMessage: "Birthday drinks in such a bluey wooey day! ENJOY!!!",
+    unlockMessage: "Birthday drinks on such a bluey wooey day! ENJOY!!!",
   }
 ];
 
